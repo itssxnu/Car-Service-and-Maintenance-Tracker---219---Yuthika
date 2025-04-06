@@ -4,14 +4,22 @@ public class UserModel {
     private String UserEmail;
     private String Username;
     private String UserMobileNumber;
+    private String Password;
 
     public UserModel() {
     }
 
     public UserModel(String userEmail, String username, String userMobileNumber) {
-        UserEmail = userEmail;
-        Username = username;
-        UserMobileNumber = userMobileNumber;
+        this.UserEmail = userEmail;
+        this.Username = username;
+        this.UserMobileNumber = userMobileNumber;
+    }
+
+    public UserModel(String userEmail, String password, String username, String userMobileNumber) {
+        this.UserEmail = userEmail;
+        this.Password = password;
+        this.Username = username;
+        this.UserMobileNumber = userMobileNumber;
     }
 
     public String getUserEmail() {
@@ -19,7 +27,7 @@ public class UserModel {
     }
 
     public void setUserEmail(String userEmail) {
-        UserEmail = userEmail;
+        this.UserEmail = userEmail;
     }
 
     public String getUsername() {
@@ -27,7 +35,7 @@ public class UserModel {
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.Username = username;
     }
 
     public String getUserMobileNumber() {
@@ -35,6 +43,14 @@ public class UserModel {
     }
 
     public void setUserMobileNumber(String userMobileNumber) {
-        UserMobileNumber = userMobileNumber;
+        this.UserMobileNumber = userMobileNumber;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        this.Password = password;
     }
 }
