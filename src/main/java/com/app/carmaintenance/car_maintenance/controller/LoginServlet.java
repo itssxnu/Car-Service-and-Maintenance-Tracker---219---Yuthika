@@ -1,4 +1,4 @@
-package com.app.carmaintenance.car_maintenance.model;
+package com.app.carmaintenance.car_maintenance.controller;
 
 
 import com.app.carmaintenance.car_maintenance.model.UserModel;
