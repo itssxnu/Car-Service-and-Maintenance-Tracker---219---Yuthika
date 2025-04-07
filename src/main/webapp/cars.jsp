@@ -61,7 +61,17 @@
             </div>
         </div>
 
-        <!-- Add more cars here with the same col-md-4 structure -->
+        <!-- Simple Add New Vehicle Container -->
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="add-container" onclick="document.getElementById('addVehicleModal').style.display='block'">
+                    <div class="plus-icon">+</div>
+                    <h4>Add New Vehicle</h4>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 </body>
