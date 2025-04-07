@@ -13,6 +13,10 @@ public class VehicleModel {
         this.serviceHistory = new ServiceHistory();
     }
 
+    public VehicleModel() {
+        
+    }
+
     public String getVehicleNumber() {
         return vehicleNumber;
     }
@@ -27,6 +31,24 @@ public class VehicleModel {
 
     public ServiceHistory getServiceHistory() {
         return serviceHistory;
+    }
+
+    public void setvehicleNumber(String trim) {
+    }
+
+    public void setmodel(String trim) {
+    }
+
+    public void setmakeYear(String s) {
+    }
+
+    public void setVehicleNumber(String trim) {
+    }
+
+    public void setModel(String trim) {
+    }
+
+    public void setMakeYear(String s) {
     }
 }
 
