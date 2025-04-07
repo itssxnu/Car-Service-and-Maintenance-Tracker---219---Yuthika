@@ -13,7 +13,7 @@
 <%
     UserModel user = (UserModel) session.getAttribute("user");
     if (user == null) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("UserModel.jsp");
         return;
     }
 
@@ -33,7 +33,7 @@
     <hr>
 
     <div class="mb-3">
-        <a href="addVehicle.jsp" class="btn btn-success">Add New Vehicle</a>
+        <a href="newcaradding.jsp" class="btn btn-success">Add New Vehicle</a>
         <a href="LogoutServlet" class="btn btn-secondary">Logout</a>
     </div>
 

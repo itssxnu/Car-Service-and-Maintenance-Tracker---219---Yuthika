@@ -19,26 +19,18 @@ public class AddCarServlet extends HttpServlet {
         String vehicleName = request.getParameter("vehicleName");
         String numberPlate = request.getParameter("numberPlate");
 
-        // Save to file (append mode)
-        try (FileWriter writer = new FileWriter("D:/cars.txt", true)) { // Change path as needed
+        // Save to file (or storage logic)
+        try (FileWriter writer = new FileWriter("D:/cars.txt", true)) {
             writer.write(vehicleName + " | " + numberPlate + "\n");
         }
 
-        // Confirmation HTML
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        // ✅ Add the vehicle to a list or reload vehicles here
+        // For now, we just simulate redirecting back to dashboard
+        // You should ideally load the latest vehicle list here and set it:
+        // request.setAttribute("vehicles", loadedVehiclesList);
 
-        out.println("<!DOCTYPE html>");
-        out.println("<html><head><title>Car Added</title>");
-        out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'>");
-        out.println("</head><body class='bg-light'>");
-        out.println("<div class='container mt-5 text-center'>");
-        out.println("<div class='alert alert-success'>");
-        out.println("<h4 class='alert-heading'>Car Added Successfully!</h4>");
-        out.println("<p>Vehicle: <strong>" + vehicleName + "</strong><br>Number Plate: <strong>" + numberPlate + "</strong></p>");
-        out.println("<hr>");
-        out.println("<a href='addCar.jsp' class='btn btn-primary'>Add Another Car</a>");
-        out.println("</div></div>");
-        out.println("</body></html>");
+        // Forward to dashboard.jsp instead of redirect
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }
+
