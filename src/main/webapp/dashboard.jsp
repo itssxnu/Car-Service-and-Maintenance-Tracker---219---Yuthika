@@ -50,7 +50,6 @@
         <tr>
             <th>Vehicle Number</th>
             <th>Model</th>
-            <th>Make Year</th>
             <th>Service History</th>
         </tr>
         </thead>
@@ -59,7 +58,6 @@
         <tr>
             <td><%= vehicle.getVehicleNumber() %></td>
             <td><%= vehicle.getModel() %></td>
-            <td><%= vehicle.getMakeYear() %></td>
             <td>
                 <a href="ViewServiceServlet?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-info btn-sm">View History</a>
                 <a href="addService.jsp?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-warning btn-sm">Add Service</a>

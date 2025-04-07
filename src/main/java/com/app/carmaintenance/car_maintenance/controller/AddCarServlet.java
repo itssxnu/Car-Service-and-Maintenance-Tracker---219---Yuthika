@@ -24,7 +24,7 @@ public class AddCarServlet extends HttpServlet {
 
         // 1. Save to file
         try (FileWriter writer = new FileWriter(FILE_PATH, true)) {
-            writer.write(vehicleName + "|" + numberPlate + "|N/A|N/A\n"); // Add placeholders for model/makeYear
+            writer.write(vehicleName + "|" + numberPlate);
         }
 
         // 2. Read all vehicles from file
@@ -37,7 +37,6 @@ public class AddCarServlet extends HttpServlet {
                     VehicleModel vehicle = new VehicleModel();
                     vehicle.setVehicleNumber(parts[1].trim());
                     vehicle.setModel(parts[0].trim());
-                    vehicle.setMakeYear(parts.length > 2 ? parts[2].trim() : "N/A");
                     vehicles.add(vehicle);
                 }
             }
