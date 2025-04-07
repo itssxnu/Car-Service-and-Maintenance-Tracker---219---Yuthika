@@ -24,26 +24,11 @@ public class AddCarServlet extends HttpServlet {
 
         // 1. Save to file
         try (FileWriter writer = new FileWriter(FILE_PATH, true)) {
-            writer.write(vehicleName + "|" + numberPlate + "\n");
+            writer.write(vehicleName + "|" + numberPlate + "\n"); // Add newline!
         }
 
-        // 2. Read all vehicles from file
-        List<VehicleModel> vehicles = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\\|");
-                if (parts.length >= 2) {
-                    VehicleModel vehicle = new VehicleModel();
-                    vehicle.setVehicleNumber(parts[1].trim());
-                    vehicle.setModel(parts[0].trim());
-                    vehicles.add(vehicle);
-                }
-            }
-        }
-
-        // 3. Set to request and forward
-        request.setAttribute("vehicles", vehicles);
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        // 2. Redirect to dashboard so refresh won't repeat post
+        response.sendRedirect("DashboardServlet");
     }
+
 }

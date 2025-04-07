@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
             session.setMaxInactiveInterval(30 * 60); // Session timeout
 
             // Redirect to dashboard
-            response.sendRedirect("dashboard.jsp");
+            response.sendRedirect("DashboardServlet");
         } else {
             // Authentication failed
             request.setAttribute("error", "Invalid email or password");
