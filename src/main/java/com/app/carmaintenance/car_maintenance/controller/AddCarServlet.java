@@ -24,7 +24,7 @@ public class AddCarServlet extends HttpServlet {
 
         // 1. Save to file
         try (FileWriter writer = new FileWriter(FILE_PATH, true)) {
-            writer.write(vehicleName + "|" + numberPlate);
+            writer.write(vehicleName + "|" + numberPlate + "\n");
         }
 
         // 2. Read all vehicles from file

@@ -11,9 +11,7 @@ public class VehicleModel {
         this.serviceHistory = new ServiceHistory();
     }
 
-    public VehicleModel() {
-        
-    }
+    public VehicleModel() {}
 
     public String getVehicleNumber() {
         return vehicleNumber;
@@ -27,11 +25,16 @@ public class VehicleModel {
         return serviceHistory;
     }
 
-    public void setVehicleNumber(String trim) {
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
     }
 
-    public void setModel(String trim) {
+    public void setModel(String model) {
+        this.model = model;
     }
 
+    public void setServiceHistory(ServiceHistory serviceHistory) {
+        this.serviceHistory = serviceHistory;
+    }
 }
 
