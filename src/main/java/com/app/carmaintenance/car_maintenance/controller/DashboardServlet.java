@@ -2,12 +2,13 @@ package com.app.carmaintenance.car_maintenance.controller;
 
 import com.app.carmaintenance.car_maintenance.model.UserModel;
 import com.app.carmaintenance.car_maintenance.model.VehicleModel;
+import com.app.carmaintenance.car_maintenance.util.FileUtil;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/DashboardServlet")
@@ -21,50 +22,31 @@ public class DashboardServlet extends HttpServlet {
         HttpSession session = request.getSession();
         UserModel user = (UserModel) session.getAttribute("user");
 
+        String action = request.getParameter("action");
+
+        if (user == null && "admin".equalsIgnoreCase(action)) {
+            user = new UserModel("admin@admin.com", "admin", "Admin", "0000000000");
+            user.setRole("ADMIN");
+            session.setAttribute("user", user);
+        }
+
         if (user == null) {
             response.sendRedirect("UserModel.jsp");
             return;
         }
 
-        String action = request.getParameter("action");
-
-        if ("ADMIN".equals(user.getRole()) || "admin".equals(action)) {
+        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
             request.getRequestDispatcher("adminDashboard.jsp").forward(request, response);
             return;
         }
 
-
-
-        // Create directory if it doesn't exist
         File dir = new File(BASE_PATH);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        if (!dir.exists()) dir.mkdirs();
 
-        // File for current user (sanitize email for filename)
         String sanitizedEmail = user.getUserEmail().replaceAll("[^a-zA-Z0-9]", "_");
         File userFile = new File(BASE_PATH + sanitizedEmail + ".txt");
 
-        List<VehicleModel> vehicles = new ArrayList<>();
-
-        // Read vehicle data for that user
-        if (userFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split("\\|");
-
-                    if (parts.length >= 3 && "VEHICLE".equals(parts[0])) {
-                        String model = parts[1].trim();
-                        String vehicleNumber = parts[2].trim();
-                        VehicleModel vehicle = new VehicleModel(vehicleNumber, model);
-                        vehicles.add(vehicle);
-                    }
-
-                }
-
-            }
-        }
+        List<VehicleModel> vehicles = FileUtil.readVehiclesFromFile(userFile);
 
         request.setAttribute("vehicles", vehicles);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);

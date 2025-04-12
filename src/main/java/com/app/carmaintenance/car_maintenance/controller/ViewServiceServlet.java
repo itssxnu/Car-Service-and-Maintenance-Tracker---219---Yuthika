@@ -1,12 +1,13 @@
 package com.app.carmaintenance.car_maintenance.controller;
 
 import com.app.carmaintenance.car_maintenance.model.*;
-
+import com.app.carmaintenance.car_maintenance.util.FileUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.*;
+import java.util.List;
 
 @WebServlet("/ViewServiceServlet")
 public class ViewServiceServlet extends HttpServlet {
@@ -29,38 +30,19 @@ public class ViewServiceServlet extends HttpServlet {
             return;
         }
 
-        // Get user email and build their specific file path
         UserModel user = (UserModel) session.getAttribute("user");
         String userEmail = user.getUserEmail().replaceAll("[^a-zA-Z0-9]", "_");
         File userFile = new File(DATA_PATH + userEmail + ".txt");
 
+        List<ServiceRecord> records = FileUtil.readServiceRecords(userFile, vehicleNumber);
+
         ServiceHistory history = new ServiceHistory();
-
-        if (userFile.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    String[] parts = line.split("\\|");
-                    if (parts.length >= 9 && "SERVICE".equals(parts[0]) && parts[1].equals(vehicleNumber)) {
-                        ServiceRecord record = new ServiceRecord(
-                                parts[2],                             // date
-                                parts[3],                             // serviceType
-                                parts[4],                             // mechanic
-                                parts.length > 5 ? parts[5] : "",     // oilRenewDate
-                                parts.length > 6 ? parts[6] : "",     // lastServiceDate
-                                parts.length > 7 ? parts[7] : "",     // alignmentCheckDate
-                                parts.length > 8 ? parts[8] : "",     // tyreRenewDate
-                                parts.length > 9 ? parts[9] : ""      // specialNotice
-                        );
-
-
-                        history.add(record);
-                    }
-                }
-            }
+        for (ServiceRecord record : records) {
+            history.add(record);
         }
 
         history.selectionSortByDate();
+
         request.setAttribute("history", history.getAll());
         request.setAttribute("vehicleNumber", vehicleNumber);
         request.getRequestDispatcher("viewHistory.jsp").forward(request, response);

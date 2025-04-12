@@ -52,7 +52,7 @@
                     <td><%= vehicle.getVehicleNumber() %></td>
                     <td><%= vehicle.getModel() %></td>
                     <td>
-                        <form action="AdminServlet" method="post" onsubmit="return confirm('Delete this vehicle?')" class="d-inline">
+                        <form action="AdminDashboardServlet" method="post" onsubmit="return confirm('Delete this vehicle?')" class="d-inline">
                             <input type="hidden" name="action" value="deleteVehicle">
                             <input type="hidden" name="targetUserEmail" value="<%= ownerEmail %>">
                             <input type="hidden" name="vehicleNumber" value="<%= vehicle.getVehicleNumber() %>">
@@ -81,7 +81,7 @@
                         <td><%= sr.getServiceType() %></td>
                         <td><%= sr.getMechanic() %></td>
                         <td>
-                            <form action="AdminServlet" method="post" onsubmit="return confirm('Delete this service record?')" class="d-inline">
+                            <form action="AdminDashboardServlet" method="post" onsubmit="return confirm('Delete this service record?')" class="d-inline">
                                 <input type="hidden" name="action" value="deleteService">
                                 <input type="hidden" name="targetUserEmail" value="<%= ownerEmail %>">
                                 <input type="hidden" name="vehicleNumber" value="<%= vehicle.getVehicleNumber() %>">
