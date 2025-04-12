@@ -44,7 +44,7 @@ public class AddCarServlet extends HttpServlet {
 
         // 1. Save to file
         try (FileWriter writer = new FileWriter(filePath, true)) {
-            writer.write(vehicleName + "|" + numberPlate + "\n"); // Add newline!
+            writer.write( "VEHICLE|" + vehicleName + "|" + numberPlate + "\n"); // Add newline!
         }
 
         // 2. Redirect to dashboard so refresh won't repeat post

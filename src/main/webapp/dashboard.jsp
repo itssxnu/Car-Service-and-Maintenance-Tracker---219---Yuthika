@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: sanus
-  Date: 4/7/2025
-  Time: 10:42 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="com.app.carmaintenance.car_maintenance.model.UserModel" %>
 <%@ page import="com.app.carmaintenance.car_maintenance.model.VehicleModel" %>
 <%@ page import="java.util.List" %>
@@ -78,8 +71,8 @@
             <td><%= vehicle.getVehicleNumber() %></td>
             <td><%= vehicle.getModel() %></td>
             <td>
-                <a href="ViewServiceServlet?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-info btn-sm">View History</a>
-                <a href="addService.jsp?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-warning btn-sm">Add Service</a>
+                <a href="ViewServiceServlet?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-info">View History</a>
+                <a href="addServices.jsp?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-warning btn-sm">Add Service</a>
             </td>
         </tr>
         <% } %>

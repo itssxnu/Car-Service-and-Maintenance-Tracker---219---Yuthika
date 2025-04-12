@@ -1,10 +1,15 @@
 package com.app.carmaintenance.car_maintenance.model;
 
 public class UserModel {
+
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_USER = "USER";
+
     private String UserEmail;
     private String Username;
     private String UserMobileNumber;
     private String Password;
+    private String role = ROLE_USER;
 
     public UserModel() {
     }
@@ -20,6 +25,22 @@ public class UserModel {
         this.Password = password;
         this.Username = username;
         this.UserMobileNumber = userMobileNumber;
+    }
+
+    public UserModel(String userEmail, String username, String userMobileNumber, String password, String role) {
+        UserEmail = userEmail;
+        Username = username;
+        UserMobileNumber = userMobileNumber;
+        Password = password;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getUserEmail() {

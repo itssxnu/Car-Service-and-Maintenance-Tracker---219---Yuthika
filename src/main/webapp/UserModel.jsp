@@ -52,7 +52,7 @@
 <div class="container">
     <div class="login-container">
         <div class="login-header">
-            <h2>Login to Car Maintenance</h2>
+            <h2>Login</h2>
             <% if (request.getAttribute("error") != null) { %>
             <div class="alert alert-danger mt-3" role="alert">
                 <%= request.getAttribute("error") %>

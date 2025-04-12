@@ -14,7 +14,7 @@ public class UserUtil {
         if (userExists(user.getUserEmail())) return false;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
-            writer.write(user.getUserEmail() + "," + user.getPassword() + "," + user.getUsername() + "," + user.getUserMobileNumber());
+            writer.write( "USER|" + user.getUserEmail() + "|" + user.getPassword() + "|" + user.getUsername() + "|" + user.getUserMobileNumber());
             writer.newLine();
             return true;
         }
@@ -25,8 +25,8 @@ public class UserUtil {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts[0].equalsIgnoreCase(email)) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 2 && parts[1].equalsIgnoreCase(email)) {
                     return true;
                 }
             }
@@ -34,17 +34,28 @@ public class UserUtil {
         return false;
     }
 
+
     // Authenticate user by email and password
     public static UserModel authenticate(String email, String password) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts[0].equalsIgnoreCase(email) && parts[1].equals(password)) {
-                    return new UserModel(parts[0], parts[1], parts[2], parts[3]);
+                String[] parts = line.split("\\|");
+                if (parts.length >= 5 &&
+                        parts[1].equalsIgnoreCase(email) &&
+                        parts[2].equals(password)) {
+
+                    UserModel user = new UserModel();
+                    user.setRole(parts[0]);
+                    user.setUserEmail(parts[1]);
+                    user.setPassword(parts[2]);
+                    user.setUsername(parts[3]);
+                    user.setUserMobileNumber(parts[4]);
+                    return user;
                 }
             }
         }
         return null;
     }
+
 }

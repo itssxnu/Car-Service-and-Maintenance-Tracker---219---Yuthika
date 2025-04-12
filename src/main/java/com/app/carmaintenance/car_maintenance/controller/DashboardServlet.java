@@ -26,6 +26,15 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
+        String action = request.getParameter("action");
+
+        if ("ADMIN".equals(user.getRole()) || "admin".equals(action)) {
+            request.getRequestDispatcher("adminDashboard.jsp").forward(request, response);
+            return;
+        }
+
+
+
         // Create directory if it doesn't exist
         File dir = new File(BASE_PATH);
         if (!dir.exists()) {
@@ -44,11 +53,16 @@ public class DashboardServlet extends HttpServlet {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split("\\|");
-                    if (parts.length >= 2) {
-                        VehicleModel vehicle = new VehicleModel(parts[1].trim(), parts[0].trim());
+
+                    if (parts.length >= 3 && "VEHICLE".equals(parts[0])) {
+                        String model = parts[1].trim();
+                        String vehicleNumber = parts[2].trim();
+                        VehicleModel vehicle = new VehicleModel(vehicleNumber, model);
                         vehicles.add(vehicle);
                     }
+
                 }
+
             }
         }
 
