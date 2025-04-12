@@ -9,7 +9,6 @@ import java.util.List;
 public class VehicleUtil {
     private static final String VEHICLE_DATA_PATH = "D:/car-data/";
 
-    // Simple Pair implementation
     public static class Pair<A, B> {
         private final A first;
         private final B second;
@@ -95,7 +94,7 @@ public class VehicleUtil {
         return vehiclesWithOwners;
     }
 
-    // Add this method to VehicleUtil.java
+    // Get all the Service Details
     public static List<ServiceRecord> getServicesForVehicle(String userEmail, String vehicleNumber)
             throws IOException {
         List<ServiceRecord> services = new ArrayList<>();
@@ -118,11 +117,12 @@ public class VehicleUtil {
         return services;
     }
 
-    // Helper methods
+    // Email Cleanup
     private static String sanitizeEmail(String email) {
         return email.replaceAll("[^a-zA-Z0-9]", "_");
     }
 
+    //Line Writer
     private static void writeLinesToFile(File file, List<String> lines) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String line : lines) {

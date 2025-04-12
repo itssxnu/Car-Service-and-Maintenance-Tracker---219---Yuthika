@@ -3,7 +3,6 @@ package com.app.carmaintenance.car_maintenance.util;
 import com.app.carmaintenance.car_maintenance.model.UserModel;
 
 import java.io.*;
-import java.util.*;
 
 public class UserUtil {
     private static final String FILE_PATH =
@@ -33,7 +32,6 @@ public class UserUtil {
         }
         return false;
     }
-
 
     // Authenticate user by email and password
     public static UserModel authenticate(String email, String password) throws IOException {

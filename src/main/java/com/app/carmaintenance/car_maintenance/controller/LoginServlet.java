@@ -29,12 +29,10 @@ public class LoginServlet extends HttpServlet {
             // Create session and store user details
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            session.setMaxInactiveInterval(30 * 60); // Session timeout
+            session.setMaxInactiveInterval(30 * 60);
 
-            // Redirect to dashboard
             response.sendRedirect("DashboardServlet");
         } else {
-            // Authentication failed
             request.setAttribute("error", "Invalid email or password");
             request.getRequestDispatcher("UserModel.jsp").forward(request, response);
         }
@@ -42,7 +40,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // If someone tries to access login via GET, just show the login page
         request.getRequestDispatcher("UserModel.jsp").forward(request, response);
     }
 }

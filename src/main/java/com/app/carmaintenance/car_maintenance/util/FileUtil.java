@@ -115,13 +115,11 @@ public class FileUtil {
     public static void deleteUserAccount(String email) throws IOException {
         String sanitizedEmail = email.replaceAll("[^a-zA-Z0-9]", "_");
 
-        // Step 1: Delete car file
         File carFile = new File(CAR_DATA_DIR + sanitizedEmail + ".txt");
         if (carFile.exists()) {
             carFile.delete();
         }
 
-        // Step 2: Remove user from users.txt
         File inputFile = new File(USER_FILE_PATH);
         File tempFile = new File("D:\\219-users\\users_temp.txt");
 

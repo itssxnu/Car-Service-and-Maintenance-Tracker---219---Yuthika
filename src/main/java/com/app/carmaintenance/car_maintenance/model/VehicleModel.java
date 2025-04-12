@@ -21,20 +21,9 @@ public class VehicleModel {
         return model;
     }
 
-    public ServiceHistory getServiceHistory() {
-        return serviceHistory;
-    }
-
-    public void setVehicleNumber(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
-    }
-
     public void setModel(String model) {
         this.model = model;
     }
 
-    public void setServiceHistory(ServiceHistory serviceHistory) {
-        this.serviceHistory = serviceHistory;
-    }
 }
 

@@ -37,7 +37,6 @@ public class AdminDashboardServlet extends HttpServlet {
                     String serviceDate = request.getParameter("serviceDate");
                     FileUtil.deleteServiceFromUserFile(email, vehicleNumber, serviceDate);
                     break;
-                // Add other cases if needed
             }
 
             response.sendRedirect("adminDashboard.jsp?success=true");
