@@ -94,7 +94,11 @@ public class FileUtil {
         try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (!(line.startsWith("SERVICE") && line.contains(vehicleNumber) && line.contains(serviceDate))) {
+                String[] parts = line.split("\\|");
+                if (!(parts.length >= 10 &&
+                        "SERVICE".equals(parts[0]) &&
+                        parts[1].equals(vehicleNumber) &&
+                        parts[2].equals(serviceDate))) {
                     updatedLines.add(line);
                 }
             }
