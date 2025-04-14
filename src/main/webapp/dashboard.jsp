@@ -30,6 +30,12 @@
     .btn-success:hover {
         background-color: #218838;
     }
+    .btn-group form {
+        margin: 0;
+    }
+    .btn-group form .btn {
+        border-radius: 0;
+    }
 </style>
 <body>
 <div class="container mt-5">
@@ -38,14 +44,21 @@
 
     <div class="mb-4 text-center">
         <div class="btn-group" role="group" aria-label="User Actions">
-            <a href="newcaradding.jsp" class="btn btn-success me-2">Add Vehicle ➕ </a>
-            <a href="LogoutServlet" class="btn btn-secondary me-2">Logout</a>
+            <a href="newcaradding.jsp" class="btn btn-success me-2">Add Vehicle ➕</a>
+            <a href="appointments" class="btn btn-primary me-2">Make Appointment 📅</a>
         </div>
 
-        <form action="DeleteAccountServlet" method="post" class="d-inline"
-              onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
-            <button type="submit" class="btn btn-danger"> Delete My Account</button>
-        </form>
+        <div class="btn-group" role="group" aria-label="Account Actions">
+            <a href="LogoutServlet" class="btn btn-secondary">Logout</a>
+
+            <!-- Inline form so it's visually inside the group -->
+            <form action="DeleteAccountServlet" method="post"
+                  onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                <button type="submit" class="btn btn-danger">Delete My Account</button>
+            </form>
+        </div>
+
+
     </div>
 
 
