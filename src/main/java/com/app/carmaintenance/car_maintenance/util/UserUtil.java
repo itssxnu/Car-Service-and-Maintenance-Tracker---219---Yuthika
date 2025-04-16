@@ -1,27 +1,22 @@
 package com.app.carmaintenance.car_maintenance.util;
 
 import com.app.carmaintenance.car_maintenance.model.UserModel;
-
 import java.io.*;
 
 public class UserUtil {
-    private static final String FILE_PATH =
-            "D:\\219-users\\users.txt";
 
-    // Save user to file
     public static boolean registerUser(UserModel user) throws IOException {
         if (userExists(user.getUserEmail())) return false;
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
-            writer.write( "USER|" + user.getUserEmail() + "|" + user.getPassword() + "|" + user.getUsername() + "|" + user.getUserMobileNumber());
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Config.USERS_FILE, true))) {
+            writer.write("USER|" + user.getUserEmail() + "|" + user.getPassword() + "|" + user.getUsername() + "|" + user.getUserMobileNumber());
             writer.newLine();
             return true;
         }
     }
 
-    // Check if user exists by email
     public static boolean userExists(String email) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(Config.USERS_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\\|");
@@ -33,9 +28,8 @@ public class UserUtil {
         return false;
     }
 
-    // Authenticate user by email and password
     public static UserModel authenticate(String email, String password) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(Config.USERS_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\\|");
@@ -55,5 +49,4 @@ public class UserUtil {
         }
         return null;
     }
-
 }

@@ -16,14 +16,12 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("UserEmail");
         String password = request.getParameter("password");
 
-        // Validate input
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
             request.setAttribute("error", "Email and password are required");
             request.getRequestDispatcher("UserModel.jsp").forward(request, response);
             return;
         }
 
-        // Authenticate user
         UserModel user = UserUtil.authenticate(email, password);
         if (user != null) {
             // Create session and store user details

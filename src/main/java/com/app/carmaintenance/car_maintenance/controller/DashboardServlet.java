@@ -2,6 +2,7 @@ package com.app.carmaintenance.car_maintenance.controller;
 
 import com.app.carmaintenance.car_maintenance.model.UserModel;
 import com.app.carmaintenance.car_maintenance.model.VehicleModel;
+import com.app.carmaintenance.car_maintenance.util.Config;
 import com.app.carmaintenance.car_maintenance.util.FileUtil;
 
 import jakarta.servlet.ServletException;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @WebServlet("/DashboardServlet")
 public class DashboardServlet extends HttpServlet {
-    private static final String BASE_PATH = "D:/car-data/";
+    private static final String BASE_PATH = Config.CAR_DATA_DIR;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

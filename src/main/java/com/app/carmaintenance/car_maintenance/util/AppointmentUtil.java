@@ -1,19 +1,17 @@
 package com.app.carmaintenance.car_maintenance.util;
 
 import com.app.carmaintenance.car_maintenance.model.AppointmentModel;
-
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AppointmentUtil {
-    private static final String APPOINTMENT_FILE = "D:\\car-data\\appointments.txt";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     public static List<AppointmentModel> readAppointments() throws IOException {
         List<AppointmentModel> appointments = new ArrayList<>();
-        File file = new File(APPOINTMENT_FILE);
+        File file = new File(Config.APPOINTMENTS_FILE);
         if (!file.exists()) return appointments;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -36,7 +34,7 @@ public class AppointmentUtil {
     }
 
     public static void saveAppointments(List<AppointmentModel> appointments) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(APPOINTMENT_FILE))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Config.APPOINTMENTS_FILE))) {
             for (AppointmentModel appt : appointments) {
                 writer.write(appt.getId() + "|" +
                         appt.getCustomerName() + "|" +

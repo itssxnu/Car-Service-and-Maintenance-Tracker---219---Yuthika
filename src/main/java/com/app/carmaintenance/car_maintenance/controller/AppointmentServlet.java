@@ -28,7 +28,7 @@ public class AppointmentServlet extends HttpServlet {
         try {
             appointments = AppointmentUtil.readAppointments();
         } catch (IOException e) {
-            e.printStackTrace(); // Optional: log it
+            e.printStackTrace();
         }
 
         if ("new".equals(action)) {
@@ -69,7 +69,7 @@ public class AppointmentServlet extends HttpServlet {
         try {
             appointments = AppointmentUtil.readAppointments();
         } catch (IOException e) {
-            e.printStackTrace(); // Optional: log it
+            e.printStackTrace();
         }
 
         String action = request.getParameter("action");

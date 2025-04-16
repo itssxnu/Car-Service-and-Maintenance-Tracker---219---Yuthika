@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleUtil {
-    private static final String VEHICLE_DATA_PATH = "D:/car-data/";
 
     public static class Pair<A, B> {
         private final A first;
@@ -22,10 +21,9 @@ public class VehicleUtil {
         public B getSecond() { return second; }
     }
 
-    // Admin: Delete ANY user's vehicle
     public static void deleteVehicle(String targetUserEmail, String vehicleNumber) throws IOException {
-        String sanitizedEmail = sanitizeEmail(targetUserEmail);
-        File userFile = new File(VEHICLE_DATA_PATH + sanitizedEmail + ".txt");
+        String sanitizedEmail = Config.sanitizeEmail(targetUserEmail);
+        File userFile = new File(Config.CAR_DATA_DIR + sanitizedEmail + ".txt");
 
         if (!userFile.exists()) {
             throw new IOException("User file not found");
@@ -45,11 +43,10 @@ public class VehicleUtil {
         writeLinesToFile(userFile, updatedLines);
     }
 
-    // Admin: Delete a specific service record
     public static void deleteServiceRecord(String targetUserEmail, String vehicleNumber, String serviceDate)
             throws IOException {
-        String sanitizedEmail = sanitizeEmail(targetUserEmail);
-        File userFile = new File(VEHICLE_DATA_PATH + sanitizedEmail + ".txt");
+        String sanitizedEmail = Config.sanitizeEmail(targetUserEmail);
+        File userFile = new File(Config.CAR_DATA_DIR + sanitizedEmail + ".txt");
 
         List<String> updatedLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
@@ -67,10 +64,9 @@ public class VehicleUtil {
         writeLinesToFile(userFile, updatedLines);
     }
 
-    // Get all vehicles with owner emails
     public static List<Pair<VehicleModel, String>> getAllVehiclesWithOwners() throws IOException {
         List<Pair<VehicleModel, String>> vehiclesWithOwners = new ArrayList<>();
-        File dataDir = new File(VEHICLE_DATA_PATH);
+        File dataDir = new File(Config.CAR_DATA_DIR);
 
         File[] userFiles = dataDir.listFiles((dir, name) -> name.endsWith(".txt"));
         if (userFiles == null) return vehiclesWithOwners;
@@ -94,12 +90,11 @@ public class VehicleUtil {
         return vehiclesWithOwners;
     }
 
-    // Get all the Service Details
     public static List<ServiceRecord> getServicesForVehicle(String userEmail, String vehicleNumber)
             throws IOException {
         List<ServiceRecord> services = new ArrayList<>();
-        String sanitizedEmail = userEmail.replaceAll("[^a-zA-Z0-9]", "_");
-        File userFile = new File(VEHICLE_DATA_PATH + sanitizedEmail + ".txt");
+        String sanitizedEmail = Config.sanitizeEmail(userEmail);
+        File userFile = new File(Config.CAR_DATA_DIR + sanitizedEmail + ".txt");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
             String line;
@@ -117,12 +112,6 @@ public class VehicleUtil {
         return services;
     }
 
-    // Email Cleanup
-    private static String sanitizeEmail(String email) {
-        return email.replaceAll("[^a-zA-Z0-9]", "_");
-    }
-
-    //Line Writer
     private static void writeLinesToFile(File file, List<String> lines) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String line : lines) {
