@@ -1,6 +1,8 @@
 <%@ page import="com.app.carmaintenance.car_maintenance.util.VehicleUtil" %>
 <%@ page import="com.app.carmaintenance.car_maintenance.model.VehicleModel" %>
 <%@ page import="com.app.carmaintenance.car_maintenance.model.ServiceRecord" %>
+<%@ page import="com.app.carmaintenance.car_maintenance.util.UserUtil" %>
+<%@ page import="com.app.carmaintenance.car_maintenance.model.UserModel" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page language="java" %>
 <!DOCTYPE html>
@@ -10,7 +12,7 @@
     <title>Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .service-table {
+        .service-table, .user-management {
             display: none;
         }
     </style>
@@ -26,6 +28,43 @@
 
     <h2 class="mb-4 text-center">Admin Dashboard</h2>
 
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <span>User Management</span>
+            <button class="btn btn-sm btn-light" onclick="toggleSection('user-management')">Toggle User Management</button>
+        </div>
+        <div id="user-management" class="user-management card-body">
+            <h5 class="card-title">All Users</h5>
+            <a href="register.jsp?admin=true" class="btn btn-success mb-3">Create New Admin</a>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (UserModel user : UserUtil.getAllUsers()) { %>
+                <tr>
+                    <td><%= user.getUserEmail() %></td>
+                    <td><%= user.getUsername() %></td>
+                    <td><%= user.getRole() %></td>
+                    <td>
+                        <form action="AdminDashboardServlet" method="post" onsubmit="return confirm('Delete this user account?')" class="d-inline">
+                            <input type="hidden" name="action" value="deleteAccount">
+                            <input type="hidden" name="targetUserEmail" value="<%= user.getUserEmail() %>">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <% for (VehicleUtil.Pair<VehicleModel, String> entry : VehicleUtil.getAllVehiclesWithOwners()) {
         VehicleModel vehicle = entry.getFirst();
         String ownerEmail = entry.getSecond();
@@ -35,7 +74,7 @@
     <div class="card mb-4 shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <span>User: <%= ownerEmail %></span>
-            <button class="btn btn-sm btn-light" onclick="toggleServices('<%= vehicleId %>')">Toggle Services</button>
+            <button class="btn btn-sm btn-light" onclick="toggleSection('service-<%= vehicleId %>')">Toggle Services</button>
         </div>
         <div class="card-body">
             <h5 class="card-title">Vehicle Info</h5>
@@ -101,8 +140,8 @@
 </div>
 
 <script>
-    function toggleServices(id) {
-        const el = document.getElementById("service-" + id);
+    function toggleSection(id) {
+        const el = document.getElementById(id);
         el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
     }
 </script>

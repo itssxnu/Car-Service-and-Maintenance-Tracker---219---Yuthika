@@ -1,3 +1,4 @@
+<%@ page import="com.app.carmaintenance.car_maintenance.model.UserModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +12,10 @@
 <div class="container">
     <div class="login-container">
         <h2>Register</h2>
+
+        <% if (request.getAttribute("error") != null) { %>
+        <div class="alert alert-danger"><%= request.getAttribute("error") %></div>
+        <% } %>
 
         <form action="RegisterServlet" method="post">
             <div class="mb-3">
@@ -33,7 +38,24 @@
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
 
+            <%
+                HttpSession session1 = request.getSession(false);
+                UserModel currentUser = (session1 != null) ? (UserModel) session1.getAttribute("user") : null;
+                if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())) {
+            %>
+            <div class="mb-3">
+                <label for="role" class="form-label">User Role</label>
+                <select class="form-control" id="role" name="role" required>
+                    <option value="USER">Regular User</option>
+                    <option value="ADMIN">Administrator</option>
+                </select>
+            </div>
+            <% } else { %>
+            <input type="hidden" name="role" value="USER">
+            <% } %>
+
             <button type="submit" class="btn btn-primary">Register</button>
+            <a href="UserModel.jsp" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>

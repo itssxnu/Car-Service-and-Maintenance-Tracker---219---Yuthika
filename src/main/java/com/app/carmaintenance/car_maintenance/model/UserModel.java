@@ -27,12 +27,12 @@ public class UserModel {
         this.UserMobileNumber = userMobileNumber;
     }
 
-    public UserModel(String userEmail, String username, String userMobileNumber, String password, String role) {
-        UserEmail = userEmail;
-        Username = username;
-        UserMobileNumber = userMobileNumber;
-        Password = password;
-        this.role = role;
+    public UserModel(String userEmail, String password, String username, String userMobileNumber, String role) {
+        this.UserEmail = userEmail;
+        this.Password = password;
+        this.Username = username;
+        this.UserMobileNumber = userMobileNumber;
+        this.role = role != null ? role : "USER"; // Default to USER if role is null
     }
 
     public String getRole() {

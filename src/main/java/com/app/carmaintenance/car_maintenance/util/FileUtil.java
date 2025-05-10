@@ -123,6 +123,7 @@ public class FileUtil {
     public static void deleteUserAccount(String email) throws IOException {
         String sanitizedEmail = Config.sanitizeEmail(email);
 
+        // Delete associated car file
         File carFile = new File(Config.CAR_DATA_DIR + sanitizedEmail + ".txt");
         if (carFile.exists()) carFile.delete();
 
@@ -131,9 +132,11 @@ public class FileUtil {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
              PrintWriter writer = new PrintWriter(new FileWriter(tempFile))) {
+
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-                if (!currentLine.startsWith(email + ",")) {
+                String[] parts = currentLine.split("\\|");
+                if (parts.length > 1 && !parts[1].equalsIgnoreCase(email)) {
                     writer.println(currentLine);
                 }
             }
@@ -143,4 +146,78 @@ public class FileUtil {
             tempFile.renameTo(inputFile);
         }
     }
+
+    public static List<String> readFile(String filePath) {
+        List<String> lines = new ArrayList<>();
+        File file = new File(filePath);
+
+        try {
+            // Create file if it doesn't exist
+            if (!file.exists()) {
+                file.getParentFile().mkdirs(); // create parent directories if needed
+                file.createNewFile();
+            }
+
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    lines.add(line.trim());
+                }
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lines;
+    }
+
+    public static void writeCustomerDetails(String name, String email, String number) throws IOException {
+        String sanitizedEmail = Config.sanitizeEmail(email);
+        File customerFile = new File(Config.CUSTOMER_FILE + sanitizedEmail + ".txt");
+
+        // Create folder if it doesn't exist
+        File folder = new File(Config.CUSTOMER_FILE);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(customerFile, false))) {
+            writer.write("CUSTOMER|" + name + "|" + email + "|" + number);
+            writer.newLine();
+        }
+    }
+
+    public static String[] readCustomerDetailsFromFile(File file) throws IOException {
+        if (!file.exists()) return null;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if (line != null && line.startsWith("CUSTOMER")) {
+                return line.split("\\|");
+            }
+        }
+
+        return null;
+    }
+
+    public static String[] readCustomerDetails(String email) throws IOException {
+        File customerFile = new File(Config.CUSTOMER_FILE + Config.sanitizeEmail(email) + ".txt");
+        if (!customerFile.exists()) return null;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(customerFile))) {
+            String line = reader.readLine();
+            if (line != null && line.startsWith("CUSTOMER")) {
+                return line.split("\\|");
+            }
+        }
+
+        return null;
+    }
+
+
+
 }

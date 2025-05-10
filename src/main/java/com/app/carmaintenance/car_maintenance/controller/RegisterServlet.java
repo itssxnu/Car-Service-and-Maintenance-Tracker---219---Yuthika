@@ -15,11 +15,29 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         String username = request.getParameter("username");
         String phone = request.getParameter("phone");
+        String role = request.getParameter("role");
 
-        UserModel newUser = new UserModel(email, password, username, phone);
+        // Get current user from session
+        HttpSession session = request.getSession(false);
+        UserModel currentUser = (session != null) ? (UserModel) session.getAttribute("user") : null;
+
+        // Only allow ADMIN role to be set if current user is admin AND they selected ADMIN role
+        if (currentUser == null || !"ADMIN".equalsIgnoreCase(currentUser.getRole())) {
+            role = "USER"; // Force USER role for non-admin registrations
+        } else {
+            // For admin users, use the role they selected (default is USER from the dropdown)
+            role = (role != null && !role.isEmpty()) ? role : "USER";
+        }
+
+        // Create user with fields in correct order
+        UserModel newUser = new UserModel(email, password, username, phone, role);
 
         if (UserUtil.registerUser(newUser)) {
-            response.sendRedirect("UserModel.jsp");
+            if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())) {
+                response.sendRedirect("adminDashboard.jsp?success=User created successfully");
+            } else {
+                response.sendRedirect("UserModel.jsp?success=Registration successful");
+            }
         } else {
             request.setAttribute("error", "User already exists!");
             request.getRequestDispatcher("register.jsp").forward(request, response);

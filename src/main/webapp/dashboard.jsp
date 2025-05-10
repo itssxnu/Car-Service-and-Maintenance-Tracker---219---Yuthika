@@ -19,6 +19,7 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <style>
     .btn-group .btn {
@@ -30,11 +31,20 @@
     .btn-success:hover {
         background-color: #218838;
     }
+    .btn-primary:hover {
+        background-color: #0069d9;
+    }
     .btn-group form {
         margin: 0;
     }
     .btn-group form .btn {
         border-radius: 0;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
     }
 </style>
 <body>
@@ -42,40 +52,51 @@
     <h2>Welcome, <%= user.getUsername().toUpperCase() %>!</h2>
     <hr>
 
-    <div class="mb-4 text-center">
-        <div class="btn-group" role="group" aria-label="User Actions">
-            <a href="newcaradding.jsp" class="btn btn-success me-2">Add Vehicle ➕</a>
-            <a href="appointments" class="btn btn-primary me-2">Make Appointment 📅</a>
+    <div class="action-buttons">
+        <div class="btn-group" role="group" aria-label="Vehicle Actions">
+            <a href="newcaradding.jsp" class="btn btn-success me-2">
+                <i class="bi bi-car-front"></i> Add Vehicle
+            </a>
+            <a href="appointments" class="btn btn-primary me-2">
+                <i class="bi bi-calendar-plus"></i> Make Appointment
+            </a>
+        </div>
+
+        <div class="btn-group" role="group" aria-label="Customer Actions">
+            <a href="add-customer.jsp" class="btn btn-info me-2">
+                <i class="bi bi-person-plus"></i> Add/Update My Details
+            </a>
         </div>
 
         <div class="btn-group" role="group" aria-label="Account Actions">
-            <a href="LogoutServlet" class="btn btn-secondary">Logout</a>
-
-            <!-- Inline form so it's visually inside the group -->
+            <a href="LogoutServlet" class="btn btn-secondary">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
             <form action="DeleteAccountServlet" method="post"
                   onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
-                <button type="submit" class="btn btn-danger">Delete My Account</button>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Delete Account
+                </button>
             </form>
         </div>
-
-
     </div>
 
-
-    <h4>Your Vehicles</h4>
+    <h4><i class="bi bi-car-front"></i> Your Vehicles</h4>
     <%
         if (vehicles == null || vehicles.isEmpty()) {
     %>
-    <p>You haven't added any vehicles yet.</p>
+    <div class="alert alert-info">
+        You haven't added any vehicles yet.
+    </div>
     <%
     } else {
     %>
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
         <tr>
             <th>Vehicle Number</th>
             <th>Model</th>
-            <th>Service History</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -84,8 +105,14 @@
             <td><%= vehicle.getVehicleNumber() %></td>
             <td><%= vehicle.getModel() %></td>
             <td>
-                <a href="ViewServiceServlet?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-info">View History</a>
-                <a href="addServices.jsp?vehicleNumber=<%= vehicle.getVehicleNumber() %>" class="btn btn-warning btn-sm">Add Service</a>
+                <a href="ViewServiceServlet?vehicleNumber=<%= vehicle.getVehicleNumber() %>"
+                   class="btn btn-info btn-sm">
+                    <i class="bi bi-clock-history"></i> View History
+                </a>
+                <a href="addServices.jsp?vehicleNumber=<%= vehicle.getVehicleNumber() %>"
+                   class="btn btn-warning btn-sm">
+                    <i class="bi bi-wrench"></i> Add Service
+                </a>
             </td>
         </tr>
         <% } %>

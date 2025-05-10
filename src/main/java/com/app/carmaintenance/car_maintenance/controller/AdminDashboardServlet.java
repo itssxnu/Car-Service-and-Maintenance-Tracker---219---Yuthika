@@ -2,6 +2,7 @@ package com.app.carmaintenance.car_maintenance.controller;
 
 import com.app.carmaintenance.car_maintenance.model.UserModel;
 import com.app.carmaintenance.car_maintenance.util.FileUtil;
+import com.app.carmaintenance.car_maintenance.util.UserUtil;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -36,6 +37,17 @@ public class AdminDashboardServlet extends HttpServlet {
                 case "deleteService":
                     String serviceDate = request.getParameter("serviceDate");
                     FileUtil.deleteServiceFromUserFile(email, vehicleNumber, serviceDate);
+                    break;
+                case "deleteAccount":
+                    UserUtil.deleteUserAccount(email);
+                    break;
+                case "deleteCustomer":
+                    String customerEmail = request.getParameter("targetUserEmail");
+                    if (UserUtil.deleteCustomer(customerEmail)) {
+                        response.sendRedirect("adminDashboard.jsp?success=Customer+deleted+successfully");
+                    } else {
+                        response.sendRedirect("adminDashboard.jsp?error=Failed+to+delete+customer");
+                    }
                     break;
             }
 

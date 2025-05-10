@@ -13,6 +13,7 @@ public class Config {
     public static String APPOINTMENT_DIR;
     public static String USERS_FILE;
     public static String APPOINTMENTS_FILE;
+    public static String CUSTOMER_FILE;
 
     public static void init(ServletContext context) {
 
@@ -24,6 +25,7 @@ public class Config {
         APPOINTMENT_DIR = DATA_DIR + "appointments/";
         USERS_FILE = DATA_DIR + "users.txt";
         APPOINTMENTS_FILE = APPOINTMENT_DIR + "appointments.txt";
+        CUSTOMER_FILE = DATA_DIR + "customers.txt";
 
         createDirectoriesAndFiles();
     }
@@ -34,6 +36,7 @@ public class Config {
         createDirectoryIfNotExists(APPOINTMENT_DIR);
         createFileIfNotExists(USERS_FILE);
         createFileIfNotExists(APPOINTMENTS_FILE);
+        createFileIfNotExists(CUSTOMER_FILE);
     }
 
     private static void createDirectoryIfNotExists(String path) {
