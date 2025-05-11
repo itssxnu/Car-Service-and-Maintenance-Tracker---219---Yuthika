@@ -1,5 +1,6 @@
 package com.app.carmaintenance.car_maintenance.util;
 
+import com.app.carmaintenance.car_maintenance.model.AdminModel;
 import jakarta.servlet.ServletContext;
 
 import java.io.BufferedWriter;
@@ -13,7 +14,7 @@ public class Config {
     public static String APPOINTMENT_DIR;
     public static String USERS_FILE;
     public static String APPOINTMENTS_FILE;
-    public static String CUSTOMER_FILE;
+    public static String CUSTOMERS_FILE;
 
     public static void init(ServletContext context) {
 
@@ -25,7 +26,7 @@ public class Config {
         APPOINTMENT_DIR = DATA_DIR + "appointments/";
         USERS_FILE = DATA_DIR + "users.txt";
         APPOINTMENTS_FILE = APPOINTMENT_DIR + "appointments.txt";
-        CUSTOMER_FILE = DATA_DIR + "customers.txt";
+        CUSTOMERS_FILE = DATA_DIR + "customers.txt";
 
         createDirectoriesAndFiles();
     }
@@ -36,7 +37,7 @@ public class Config {
         createDirectoryIfNotExists(APPOINTMENT_DIR);
         createFileIfNotExists(USERS_FILE);
         createFileIfNotExists(APPOINTMENTS_FILE);
-        createFileIfNotExists(CUSTOMER_FILE);
+        createFileIfNotExists(CUSTOMERS_FILE);
     }
 
     private static void createDirectoryIfNotExists(String path) {
@@ -66,7 +67,17 @@ public class Config {
 
     private static void addAdminUser(File usersFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(usersFile, true))) {
-            writer.write("ADMIN|admin@gmail.com|admin|admin|0000000000");
+            AdminModel admin = new AdminModel(
+                    "admin@gmail.com",
+                    "admin",
+                    "admin",
+                    "0000000000"
+            );
+            writer.write(admin.getRole() + "|" +
+                    admin.getUserEmail() + "|" +
+                    admin.getPassword() + "|" +
+                    admin.getUsername() + "|" +
+                    admin.getUserMobileNumber());
             writer.newLine();
             System.out.println("Admin user added to users.txt");
         } catch (IOException e) {

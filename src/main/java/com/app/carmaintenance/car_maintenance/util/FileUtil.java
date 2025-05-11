@@ -147,40 +147,32 @@ public class FileUtil {
         }
     }
 
-    public static List<String> readFile(String filePath) {
+    public static List<String> readFile(String filePath) throws IOException {
         List<String> lines = new ArrayList<>();
         File file = new File(filePath);
 
-        try {
-            // Create file if it doesn't exist
-            if (!file.exists()) {
-                file.getParentFile().mkdirs(); // create parent directories if needed
-                file.createNewFile();
-            }
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
 
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-
             while ((line = reader.readLine()) != null) {
                 if (!line.trim().isEmpty()) {
                     lines.add(line.trim());
                 }
             }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
         return lines;
     }
 
     public static void writeCustomerDetails(String name, String email, String number) throws IOException {
         String sanitizedEmail = Config.sanitizeEmail(email);
-        File customerFile = new File(Config.CUSTOMER_FILE + sanitizedEmail + ".txt");
+        File customerFile = new File(Config.CUSTOMERS_FILE + sanitizedEmail + ".txt");
 
         // Create folder if it doesn't exist
-        File folder = new File(Config.CUSTOMER_FILE);
+        File folder = new File(Config.CUSTOMERS_FILE);
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -205,7 +197,7 @@ public class FileUtil {
     }
 
     public static String[] readCustomerDetails(String email) throws IOException {
-        File customerFile = new File(Config.CUSTOMER_FILE + Config.sanitizeEmail(email) + ".txt");
+        File customerFile = new File(Config.CUSTOMERS_FILE + Config.sanitizeEmail(email) + ".txt");
         if (!customerFile.exists()) return null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(customerFile))) {

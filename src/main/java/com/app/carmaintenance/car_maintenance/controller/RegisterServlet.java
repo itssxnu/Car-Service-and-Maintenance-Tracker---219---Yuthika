@@ -1,5 +1,6 @@
 package com.app.carmaintenance.car_maintenance.controller;
 
+import com.app.carmaintenance.car_maintenance.model.AdminModel;
 import com.app.carmaintenance.car_maintenance.model.UserModel;
 import com.app.carmaintenance.car_maintenance.util.UserUtil;
 
@@ -21,16 +22,15 @@ public class RegisterServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         UserModel currentUser = (session != null) ? (UserModel) session.getAttribute("user") : null;
 
-        // Only allow ADMIN role to be set if current user is admin AND they selected ADMIN role
-        if (currentUser == null || !"ADMIN".equalsIgnoreCase(currentUser.getRole())) {
-            role = "USER"; // Force USER role for non-admin registrations
-        } else {
-            // For admin users, use the role they selected (default is USER from the dropdown)
-            role = (role != null && !role.isEmpty()) ? role : "USER";
-        }
+        UserModel newUser;
 
-        // Create user with fields in correct order
-        UserModel newUser = new UserModel(email, password, username, phone, role);
+        // Only allow ADMIN role to be set if current user is admin AND they selected ADMIN role
+        if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())
+                && "ADMIN".equalsIgnoreCase(role)) {
+            newUser = new AdminModel(email, password, username, phone);
+        } else {
+            newUser = new UserModel(email, password, username, phone, "USER");
+        }
 
         if (UserUtil.registerUser(newUser)) {
             if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())) {

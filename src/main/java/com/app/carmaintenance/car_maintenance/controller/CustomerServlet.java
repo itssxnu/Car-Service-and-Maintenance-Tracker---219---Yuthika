@@ -24,12 +24,30 @@ public class CustomerServlet extends HttpServlet {
             return;
         }
 
-        if ("form".equals(action)) {
-            CustomerModel customer = customerDAO.getCustomerByEmail(user.getUserEmail());
-            request.setAttribute("customer", customer);
-            request.getRequestDispatcher("customer-form.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("DashboardServlet");
+        switch (action) {
+            case "form":
+                String email = request.getParameter("email");
+                CustomerModel customer = null;
+
+                if (email != null && !email.isEmpty()) {
+                    customer = customerDAO.getCustomerByEmail(email);
+                }
+
+                if (customer == null) {
+                    customer = new CustomerModel();
+                }
+
+                request.setAttribute("customer", customer);
+                request.getRequestDispatcher("add-customer.jsp").forward(request, response);
+                break;
+
+            case "list":
+                request.setAttribute("customers", customerDAO.getAllCustomers());
+                request.getRequestDispatcher("customers.jsp").forward(request, response);
+                break;
+
+            default:
+                response.sendRedirect("dashboard.jsp");
         }
     }
 
@@ -39,16 +57,30 @@ public class CustomerServlet extends HttpServlet {
         UserModel user = (UserModel) (session != null ? session.getAttribute("user") : null);
 
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("UserModel.jsp");
             return;
         }
 
         if ("save".equals(action)) {
             String name = request.getParameter("name");
-            String number = request.getParameter("number");
-            CustomerModel customer = new CustomerModel(name, user.getUserEmail(), number);
-            customerDAO.saveOrUpdateCustomer(customer);
-            response.sendRedirect("DashboardServlet?message=Customer+details+saved");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+
+            CustomerModel customer = new CustomerModel(name, email, phone);
+
+            if (customerDAO.saveOrUpdateCustomer(customer)) {
+                response.sendRedirect("customer?action=list&message=Customer+saved");
+            } else {
+                response.sendRedirect("customer?action=list&error=Save+failed");
+            }
+        } else if ("delete".equals(action)) {
+
+            String emailToBeDeleted = request.getParameter("email");
+            if (customerDAO.deleteCustomer(emailToBeDeleted)) {
+                response.sendRedirect("customer?action=list&message=Customer+deleted+successfully");
+            } else {
+                response.sendRedirect("customer?action=list&error=Failed+to+delete+customer");
+            }
         }
     }
 }

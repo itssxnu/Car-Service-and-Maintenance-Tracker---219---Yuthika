@@ -4,51 +4,106 @@ import com.app.carmaintenance.car_maintenance.model.CustomerModel;
 import com.app.carmaintenance.car_maintenance.util.Config;
 import com.app.carmaintenance.car_maintenance.util.FileUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAO {
 
-    // Get all customers by scanning the directory
     public List<CustomerModel> getAllCustomers() {
         List<CustomerModel> customers = new ArrayList<>();
-        File folder = new File(Config.CUSTOMER_FILE);
-
-        if (!folder.exists()) return customers;
-
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".txt"));
-        if (files == null) return customers;
-
-        for (File file : files) {
-            try {
-                String[] parts = FileUtil.readCustomerDetailsFromFile(file);
-                if (parts != null && parts.length >= 4) {
+        try {
+            List<String> lines = FileUtil.readFile(Config.CUSTOMERS_FILE);
+            for (String line : lines) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 4 && parts[0].equals("CUSTOMER")) {
                     customers.add(new CustomerModel(parts[1], parts[2], parts[3]));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return customers;
     }
 
     public CustomerModel getCustomerByEmail(String email) {
         try {
-            String[] parts = FileUtil.readCustomerDetails(email);  // uses email to construct the file path internally
-            if (parts != null && parts.length >= 4) {
-                return new CustomerModel(parts[1], parts[2], parts[3]);
+            List<String> lines = FileUtil.readFile(Config.CUSTOMERS_FILE);
+            for (String line : lines) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 4 && parts[0].equals("CUSTOMER") && parts[2].equalsIgnoreCase(email)) {
+                    return new CustomerModel(parts[1], parts[2], parts[3]);
+                }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    public boolean saveOrUpdateCustomer(CustomerModel customer) {
+        try {
+            List<String> lines = FileUtil.readFile(Config.CUSTOMERS_FILE);
+            List<String> updatedLines = new ArrayList<>();
+            boolean found = false;
 
-    public void saveOrUpdateCustomer(CustomerModel customer) throws IOException {
-        FileUtil.writeCustomerDetails(customer.getName(), customer.getEmail(), customer.getPhoneNumber());
+            // Update existing customer or add new one
+            for (String line : lines) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 4 && parts[0].equals("CUSTOMER") && parts[2].equalsIgnoreCase(customer.getEmail())) {
+                    updatedLines.add("CUSTOMER|" + customer.getName() + "|" + customer.getEmail() + "|" + customer.getPhoneNumber());
+                    found = true;
+                } else {
+                    updatedLines.add(line);
+                }
+            }
+
+            if (!found) {
+                updatedLines.add("CUSTOMER|" + customer.getName() + "|" + customer.getEmail() + "|" + customer.getPhoneNumber());
+            }
+
+            // Write all lines back to file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(Config.CUSTOMERS_FILE))) {
+                for (String line : updatedLines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteCustomer(String email) {
+        try {
+            List<String> lines = FileUtil.readFile(Config.CUSTOMERS_FILE);
+            List<String> updatedLines = new ArrayList<>();
+            boolean found = false;
+
+            for (String line : lines) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 4 && parts[0].equals("CUSTOMER") && parts[2].equalsIgnoreCase(email)) {
+                    found = true;
+                    continue; // Skip this line (delete)
+                }
+                updatedLines.add(line);
+            }
+
+            if (found) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(Config.CUSTOMERS_FILE))) {
+                    for (String line : updatedLines) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                }
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

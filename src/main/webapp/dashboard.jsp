@@ -63,8 +63,8 @@
         </div>
 
         <div class="btn-group" role="group" aria-label="Customer Actions">
-            <a href="add-customer.jsp" class="btn btn-info me-2">
-                <i class="bi bi-person-plus"></i> Add/Update My Details
+            <a href="customer?action=list" class="btn btn-info me-2">
+                <i class="bi bi-person-plus"></i> Add/View Customer Details
             </a>
         </div>
 
